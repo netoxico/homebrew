@@ -30,7 +30,7 @@ class Fontforge < Formula
     args << "--without-python" if ARGV.include? "--without-python"
 
     # Using 10.8? Need to compile against the 10.7 SDK
-    if MacOS.mountain_lion?
+    if MacOS.mountain_lion? or MacOS::Xcode.version >= '4.4'
         lion_prefix = File.join(MacOS::Xcode.prefix, "Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk")
         ENV.append "CFLAGS", "-isysroot " + lion_prefix
     end
@@ -49,7 +49,7 @@ class Fontforge < Formula
     # https://trac.macports.org/ticket/33284
     header_prefix = MacOS::Xcode.prefix
     # Using 10.8? More hardcoded paths to the 10.7 SDK to fix!
-    if MacOS.mountain_lion?
+    if MacOS.mountain_lion? or MacOS::Xcode.version >= '4.4'
       header_prefix = File.join(lion_prefix, "Developer")
     end
     inreplace %w(fontforge/macbinary.c fontforge/startui.c gutils/giomime.c) do |s|
